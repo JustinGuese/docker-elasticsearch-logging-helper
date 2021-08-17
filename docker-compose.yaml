@@ -1,0 +1,26 @@
+version: "3"
+services:
+  elasticsearch:
+    image: elasticsearch:7.14.0
+    container_name: elasticsearch
+    environment: 
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=changeme
+      - xpack.security.enabled=true
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  es_logger:
+    image: guestros/elasticsearch-logger-endpoint:latest
+    build: .
+    depends_on: 
+      - elasticsearch
+    container_name: es_logger
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - ES_HOST=elasticsearch
+      - ES_USER=elastic
+      - ES_PW=changeme
+      - AUTH_PW=testitest
+  

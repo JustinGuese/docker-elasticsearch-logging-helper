@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: elasticsearch
+  name: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: elasticsearch
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: elasticsearch
+    spec:
+      containers:
+        - image: elasticsearch:7.14.0
+          name: elasticsearch
+          env:
+            - name: ELASTIC_PASSWORD
+              value: changeme
+            - name: ES_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: bootstrap.memory_lock
+              value: "true"
+            - name: discovery.type
+              value: single-node
+            - name: xpack.security.enabled
+              value: "true"
+          
+          resources: {}
+      restartPolicy: Always
+status: {}
